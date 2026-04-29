@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodLogistics S.A. – Distribució i Logística Alimentària</title>
+  <style>
+    :root {
+      --color-primary:   #1D9E75;
+      --color-primary-dark: #0F6E56;
+      --color-primary-light: #E1F5EE;
+      --color-accent:    #EF9F27;
+      --color-accent-dark: #BA7517;
+      --color-bg:        #ffffff;
+      --color-bg-alt:    #f7f9f8;
+      --color-text:      #1a1a1a;
+      --color-text-muted:#5F5E5A;
+      --color-border:    #d3d1c7;
+      --color-white:     #ffffff;
+      --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --radius-md: 8px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-size: 16px; color: var(--color-text); background: var(--color-bg); line-height: 1.7; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+    .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; color: var(--color-primary-dark); margin-bottom: 0.5rem; }
+    .section-subtitle { font-size: 1rem; color: var(--color-text-muted); margin-bottom: 2.5rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.6rem; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; border: none; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--color-primary); color: var(--color-white); }
+    .btn-primary:hover { background: var(--color-primary-dark); }
+    .btn-outline { background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); }
+    .btn-outline:hover { background: var(--color-primary-light); }
+
+    /* HEADER */
+    header { position: sticky; top: 0; z-index: 100; background: var(--color-white); border-bottom: 1px solid var(--color-border); box-shadow: var(--shadow-sm); }
+    nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); }
+    .logo-icon { width: 38px; height: 38px; background: var(--color-primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 22px; height: 22px; fill: white; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--color-text-muted); transition: color 0.2s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -3px; width: 0; height: 2px; background: var(--color-primary); transition: width 0.2s; }
+    .nav-links a:hover { color: var(--color-primary); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { margin-left: 1rem; }
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .burger span { display: block; width: 24px; height: 2px; background: var(--color-text); border-radius: 2px; transition: all 0.3s; }
+
+    /* HERO */
+    #inici { background: linear-gradient(135deg, #085041 0%, #1D9E75 60%, #9FE1CB 100%); color: white; padding: 5rem 0 4rem; overflow: hidden; position: relative; }
+    #inici::before { content: ''; position: absolute; right: -120px; top: -80px; width: 520px; height: 520px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+    .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .hero-text h1 { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.2; margin-bottom: 1.2rem; }
+    .hero-text h1 span { color: var(--color-accent); }
+    .hero-text p { font-size: 1.05rem; opacity: 0.9; margin-bottom: 2rem; max-width: 480px; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-hero-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.7); padding: 0.7rem 1.6rem; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-hero-outline:hover { background: rgba(255,255,255,0.15); }
+    .btn-hero-primary { background: var(--color-accent); color: #2a1800; padding: 0.7rem 1.6rem; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 700; cursor: pointer; border: none; transition: background 0.2s; }
+    .btn-hero-primary:hover { background: var(--color-accent-dark); color: white; }
+    .hero-image img { border-radius: var(--radius-lg); box-shadow: 0 8px 40px rgba(0,0,0,0.25); width: 100%; height: 360px; object-fit: cover; }
+    .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .stat { display: flex; flex-direction: column; }
+    .stat strong { font-size: 1.8rem; font-weight: 700; color: var(--color-accent); }
+    .stat span { font-size: 0.82rem; opacity: 0.8; }
+
+    /* SERVEIS */
+    #serveis { padding: 5rem 0; background: var(--color-bg-alt); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .service-card { background: var(--color-white); border-radius: var(--radius-lg); border: 1px solid var(--color-border); padding: 1.75rem 1.5rem; transition: box-shadow 0.2s, transform 0.2s; }
+    .service-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .service-icon { width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--color-primary-light); display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; }
+    .service-icon svg { width: 26px; height: 26px; fill: var(--color-primary-dark); }
+    .service-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-primary-dark); }
+    .service-card p { font-size: 0.9rem; color: var(--color-text-muted); }
+    .service-tag { display: inline-block; margin-top: 1rem; font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--color-primary-light); color: var(--color-primary-dark); }
+
+    /* SOBRE */
+    #sobre { padding: 5rem 0; }
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-image img { border-radius: var(--radius-lg); width: 100%; height: 400px; object-fit: cover; }
+    .about-text .lead { font-size: 1.05rem; color: var(--color-primary); font-weight: 500; margin-bottom: 1rem; }
+    .about-text p { color: var(--color-text-muted); margin-bottom: 1rem; }
+    .values-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .value-item { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .value-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 3px; }
+    .value-dot svg { width: 12px; height: 12px; fill: white; }
+    .value-item p { margin: 0; font-size: 0.92rem; }
+    .value-item strong { color: var(--color-text); }
+
+    /* CONTACTE */
+    #contacte { padding: 5rem 0; background: var(--color-bg-alt); }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: start; }
+    .contact-info p { color: var(--color-text-muted); margin-bottom: 2rem; }
+    .contact-detail { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .contact-detail-icon { width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--color-primary-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contact-detail-icon svg { width: 20px; height: 20px; fill: var(--color-primary-dark); }
+    .contact-detail span { font-size: 0.9rem; color: var(--color-text-muted); }
+    .contact-detail strong { display: block; font-size: 0.95rem; color: var(--color-text); }
+    .contact-form { background: var(--color-white); border-radius: var(--radius-lg); border: 1px solid var(--color-border); padding: 2rem; box-shadow: var(--shadow-sm); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--color-text); }
+    .form-group input, .form-group textarea { padding: 0.6rem 0.9rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.9rem; font-family: var(--font-sans); color: var(--color-text); background: var(--color-bg); transition: border-color 0.2s, box-shadow 0.2s; resize: vertical; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(29,158,117,0.15); }
+    .form-group textarea { min-height: 120px; }
+    .form-submit { width: 100%; padding: 0.85rem; font-size: 1rem; margin-top: 0.5rem; }
+    .form-success { display: none; text-align: center; padding: 2rem; color: var(--color-primary-dark); font-weight: 600; }
+    .form-success svg { width: 48px; height: 48px; fill: var(--color-primary); margin: 0 auto 1rem; display: block; }
+
+    /* CHECKBOXES */
+    .checkbox-group { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.85rem; padding: 0.75rem; background: var(--color-bg-alt); border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+    .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin-top: 3px; accent-color: var(--color-primary); cursor: pointer; }
+    .checkbox-group label { font-size: 0.82rem; color: var(--color-text-muted); cursor: pointer; line-height: 1.5; }
+    .checkbox-group label a { color: var(--color-primary); text-decoration: underline; font-weight: 500; }
+    .checkbox-group label a:hover { color: var(--color-primary-dark); }
+    .checkbox-required { border-color: var(--color-primary-light); }
+
+    /* FOOTER */
+    footer { background: #085041; color: rgba(255,255,255,0.85); padding: 3rem 0 1.5rem; }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2rem; }
+    .footer-brand .logo { color: white; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.85rem; opacity: 0.7; max-width: 280px; }
+    .footer-col h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent); margin-bottom: 0.75rem; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.4rem; }
+    .footer-col ul li a, .footer-col ul li span { font-size: 0.85rem; opacity: 0.75; transition: opacity 0.2s; cursor: pointer; }
+    .footer-col ul li a:hover, .footer-col ul li span:hover { opacity: 1; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .footer-bottom p { font-size: 0.8rem; opacity: 0.6; }
+
+    /* ════════════════════════════════
+       COOKIE BANNER
+    ════════════════════════════════ */
+    #cookieBanner {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #085041;
+      color: rgba(255,255,255,0.92);
+      padding: 1.25rem 2rem;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      border-top: 3px solid var(--color-accent);
+    }
+    #cookieBanner.hidden { display: none; }
+    .cookie-text { flex: 1; min-width: 260px; font-size: 0.88rem; line-height: 1.6; }
+    .cookie-text strong { color: var(--color-accent); }
+    .cookie-text a { color: var(--color-accent); text-decoration: underline; }
+    .cookie-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .btn-cookie-accept { background: var(--color-accent); color: #2a1800; padding: 0.6rem 1.4rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; transition: background 0.2s; white-space: nowrap; }
+    .btn-cookie-accept:hover { background: var(--color-accent-dark); color: white; }
+    .btn-cookie-reject { background: transparent; color: rgba(255,255,255,0.7); padding: 0.6rem 1.4rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; white-space: nowrap; }
+    .btn-cookie-reject:hover { background: rgba(255,255,255,0.1); color: white; }
+    .btn-cookie-config { background: transparent; color: rgba(255,255,255,0.55); padding: 0.5rem; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: underline; white-space: nowrap; }
+    .btn-cookie-config:hover { color: white; }
+
+    /* ════════════════════════════════
+       MODAL LEGAL (Avís, Privacitat, Cookies)
+    ════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(8,80,65,0.55);
+      backdrop-filter: blur(4px);
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+    .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+    .modal-box {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      max-width: 820px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+      overflow: hidden;
+      margin: auto;
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #085041 0%, #1D9E75 100%);
+      color: white;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .modal-header h2 { font-size: 1.35rem; font-weight: 700; }
+    .modal-header p { font-size: 0.85rem; opacity: 0.8; margin-top: 0.2rem; }
+    .modal-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+    .modal-close:hover { background: rgba(255,255,255,0.35); }
+    .modal-body { padding: 2rem; max-height: 70vh; overflow-y: auto; }
+    .modal-body h3 { font-size: 1.05rem; font-weight: 700; color: var(--color-primary-dark); margin: 1.75rem 0 0.6rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--color-primary-light); }
+    .modal-body h3:first-child { margin-top: 0; }
+    .modal-body p { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 0.75rem; line-height: 1.7; }
+    .modal-body ul { padding-left: 1.2rem; margin-bottom: 0.75rem; }
+    .modal-body ul li { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 0.35rem; list-style: disc; }
+    .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+    .modal-body table th { background: var(--color-primary-light); color: var(--color-primary-dark); padding: 0.6rem 0.75rem; text-align: left; font-weight: 700; }
+    .modal-body table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); vertical-align: top; }
+    .modal-body table tr:last-child td { border-bottom: none; }
+    .modal-body .info-box { background: var(--color-primary-light); border-left: 4px solid var(--color-primary); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 0.85rem 1rem; margin-bottom: 1rem; font-size: 0.88rem; color: var(--color-primary-dark); }
+    .modal-footer { padding: 1.25rem 2rem; border-top: 1px solid var(--color-border); background: var(--color-bg-alt); display: flex; justify-content: flex-end; gap: 0.75rem; }
+
+    /* Configuració de cookies dins modal */
+    .cookie-config-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; gap: 1rem; }
+    .cookie-config-item .info { flex: 1; }
+    .cookie-config-item .info strong { font-size: 0.9rem; color: var(--color-text); display: block; margin-bottom: 0.2rem; }
+    .cookie-config-item .info span { font-size: 0.8rem; color: var(--color-text-muted); }
+    .toggle-switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 26px; transition: 0.3s; }
+    .toggle-slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: 0.3s; }
+    .toggle-switch input:checked + .toggle-slider { background: var(--color-primary); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+    .toggle-switch input:disabled + .toggle-slider { opacity: 0.6; cursor: not-allowed; }
+    .badge-required { font-size: 0.7rem; font-weight: 700; background: var(--color-primary-light); color: var(--color-primary-dark); padding: 2px 7px; border-radius: 10px; margin-left: 0.4rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-inner, .about-inner, .contact-inner, .footer-inner { grid-template-columns: 1fr; }
+      .hero-image { order: -1; }
+      .hero-image img { height: 260px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--color-white); border-bottom: 1px solid var(--color-border); padding: 1rem 1.5rem; gap: 1rem; box-shadow: var(--shadow-md); z-index: 99; }
+      .burger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.2rem; }
+      #cookieBanner { padding: 1rem; }
+      .modal-body { padding: 1.25rem; max-height: 60vh; }
+      .modal-header { padding: 1.25rem; }
+      .modal-footer { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ COOKIE BANNER ═══════════════ -->
+<div id="cookieBanner">
+  <div class="cookie-text">
+    <strong>🍪 Ús de cookies</strong><br>
+    Utilitzem cookies pròpies i de tercers per analitzar el trànsit web i millorar l'experiència de l'usuari. Podeu acceptar-les totes, rebutjar les no essencials o configurar-les manualment. Consulteu la nostra <a href="#" onclick="openModal('cookies'); return false;">Política de Cookies</a> per a més informació.
+  </div>
+  <div class="cookie-actions">
+    <button class="btn-cookie-accept" onclick="acceptCookies('all')">Acceptar totes</button>
+    <button class="btn-cookie-reject" onclick="acceptCookies('none')">Rebutjar opcionals</button>
+    <button class="btn-cookie-config" onclick="openModal('cookiesConfig')">Configurar</button>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL: AVÍS LEGAL ═══════════════ -->
+<div class="modal-overlay" id="modalAvis">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2>Avís Legal</h2>
+        <p>Darrera actualització: 1 de juny de 2025</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('avis')">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3>1. Identificació del titular</h3>
+      <p>En compliment de la Llei 34/2002, d'11 de juliol, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), s'informa que el lloc web <strong>foodlogistics.cat</strong> és propietat de:</p>
+      <div class="info-box">
+        <strong>FoodLogistics S.A.</strong><br>
+        CIF: A-08123456<br>
+        Domicili social: Polígon Industrial Can Magarola, s/n, 08302 Mataró (Barcelona)<br>
+        Telèfon: +34 937 00 00 00<br>
+        Correu electrònic: info@foodlogistics.cat<br>
+        Inscrita al Registre Mercantil de Barcelona, Tom 12345, Foli 67, Full B-98765
+      </div>
+
+      <h3>2. Objecte i àmbit d'aplicació</h3>
+      <p>El present Avís Legal regula l'accés i l'ús del lloc web <strong>foodlogistics.cat</strong> (d'ara endavant, "el Web"), del qual és titular FoodLogistics S.A. L'accés al Web implica l'acceptació plena i sense reserves de totes les disposicions contingudes en aquest Avís Legal.</p>
+
+      <h3>3. Condicions d'accés i ús</h3>
+      <p>L'usuari es compromet a fer un ús adequat dels continguts i serveis que FoodLogistics S.A. ofereix a través del Web i, amb caràcter enunciatiu però no limitatiu, a no emprar-los per a:</p>
+      <ul>
+        <li>Realitzar activitats il·lícites, il·legals o contràries a la bona fe i a l'ordre públic.</li>
+        <li>Provocar danys als sistemes físics i lògics de FoodLogistics S.A., dels seus proveïdors o de terceres persones.</li>
+        <li>Introduir o difondre a la xarxa virus informàtics o qualsevol altre sistema físic o lògic susceptible de provocar danys.</li>
+        <li>Vulnerar els drets de propietat intel·lectual o industrial, així com violar la confidencialitat de la informació de FoodLogistics S.A. o de tercers.</li>
+      </ul>
+
+      <h3>4. Propietat intel·lectual i industrial</h3>
+      <p>Tots els continguts del Web, incloent-hi textos, fotografies, gràfics, imatges, icones, tecnologia, programari, links i altres continguts audiovisuals o sonors, així com el disseny gràfic i els codis font, són propietat intel·lectual de FoodLogistics S.A. o de tercers que n'han autoritzat l'ús, sense que puguin entendre's cedits a l'usuari cap dels drets d'explotació reconeguts per la normativa vigent en matèria de propietat intel·lectual.</p>
+      <p>Les marques, noms comercials o signes distintius que apareixen al Web són titularitat de FoodLogistics S.A. o de tercers, sense que pugui entendre's que l'accés al Web atribueixi cap dret sobre les citades marques, noms comercials i/o signes distintius.</p>
+
+      <h3>5. Responsabilitat</h3>
+      <p>FoodLogistics S.A. no es responsabilitza de les decisions preses per l'usuari a partir de la informació subministrada al Web ni dels possibles errors en els continguts. La informació facilitada és de caràcter general i no substitueix la consulta professional específica.</p>
+      <p>FoodLogistics S.A. no garanteix l'absència de virus ni d'altres elements que puguin causar danys o alteracions en els sistemes informàtics, en els documents electrònics o en els fitxers de l'usuari del Web.</p>
+
+      <h3>6. Comunicacions comercials</h3>
+      <p>D'acord amb la LSSI-CE, FoodLogistics S.A. no enviarà comunicacions comercials per correu electrònic o per qualsevol altre mitjà de comunicació electrònica equivalent sense el consentiment previ i exprés dels destinataris. En cas que l'usuari hagi proporcionat la seva adreça de correu electrònic en el context de la contractació d'un producte o servei i no hagi indicat el contrari, FoodLogistics S.A. es reserva el dret d'enviar comunicacions comercials relatives a productes o serveis similars als que van ser objecte de la contractació.</p>
+
+      <h3>7. Llei aplicable i jurisdicció</h3>
+      <p>Les relacions establertes entre FoodLogistics S.A. i l'usuari es regiran per la normativa espanyola vigent i qualsevol controvèrsia se sotmetrà als Jutjats i Tribunals de la ciutat de Barcelona, llevat que la llei aplicable determini un fur imperativament diferent.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('avis')">Entès</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL: POLÍTICA DE PRIVACITAT ═══════════════ -->
+<div class="modal-overlay" id="modalPrivacitat">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2>Política de Privacitat</h2>
+        <p>Darrera actualització: 1 de juny de 2025</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('privacitat')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box">
+        A FoodLogistics S.A. ens comprometem a protegir la vostra privacitat i a tractar les vostres dades personals amb total transparència, d'acord amb el Reglament (UE) 2016/679 (RGPD) i la Llei Orgànica 3/2018 (LOPDGDD).
+      </div>
+
+      <h3>1. Responsable del tractament</h3>
+      <p><strong>FoodLogistics S.A.</strong> · CIF: A-08123456 · Polígon Industrial Can Magarola, s/n, 08302 Mataró (Barcelona) · info@foodlogistics.cat · +34 937 00 00 00</p>
+
+      <h3>2. Dades que tractem</h3>
+      <p>En funció de la relació establerta, tractem les categories de dades següents:</p>
+      <ul>
+        <li><strong>Dades identificatives:</strong> nom i cognoms, NIF/CIF, adreça.</li>
+        <li><strong>Dades de contacte:</strong> correu electrònic, telèfon.</li>
+        <li><strong>Dades de navegació:</strong> adreça IP, cookies, dades de navegació (amb el vostre consentiment).</li>
+        <li><strong>Dades professionals:</strong> empresa, càrrec (quan s'informa voluntàriament).</li>
+      </ul>
+
+      <h3>3. Finalitats i bases legals del tractament</h3>
+      <table>
+        <tr><th>Finalitat</th><th>Base legal</th></tr>
+        <tr><td>Respondre les consultes enviades pel formulari de contacte</td><td>Interès legítim / Consentiment de l'interessat (art. 6.1.a i 6.1.f RGPD)</td></tr>
+        <tr><td>Gestionar la relació contractual amb clients i proveïdors</td><td>Execució d'un contracte (art. 6.1.b RGPD)</td></tr>
+        <tr><td>Enviament de comunicacions comercials (si s'ha atorgat el consentiment)</td><td>Consentiment exprés de l'interessat (art. 6.1.a RGPD)</td></tr>
+        <tr><td>Compliment d'obligacions legals (fiscals, comptables)</td><td>Obligació legal (art. 6.1.c RGPD)</td></tr>
+        <tr><td>Anàlisi estadística del Web (cookies analítiques)</td><td>Consentiment de l'interessat (art. 6.1.a RGPD)</td></tr>
+      </table>
+
+      <h3>4. Termini de conservació</h3>
+      <p>Les dades es conservaran durant el temps necessari per a la finalitat per la qual van ser recollides, i en tot cas durant els terminis de prescripció legal aplicables:</p>
+      <ul>
+        <li>Consultes al formulari de contacte: fins a 1 any des de l'última comunicació.</li>
+        <li>Dades de clients/proveïdors: durant la vigència de la relació contractual i, posteriorment, durant els terminis legals de prescripció (màxim 6 anys, d'acord amb la normativa fiscal i mercantil).</li>
+        <li>Comunicacions comercials: fins a la revocació del consentiment o 3 anys d'inactivitat.</li>
+        <li>Dades de cookies: vegeu la Política de Cookies.</li>
+      </ul>
+
+      <h3>5. Destinataris de les dades</h3>
+      <p>Les vostres dades no seran cedides a tercers, excepte en els casos següents:</p>
+      <ul>
+        <li>Proveïdors de serveis IT (hosting, CRM) que actuen com a encarregats del tractament sota contracte conforme a l'art. 28 RGPD.</li>
+        <li>Administracions públiques, en compliment d'obligació legal.</li>
+        <li>Entitats financeres, per a la gestió de cobros i pagaments.</li>
+      </ul>
+      <p>No es realitzen transferències internacionals de dades fora de l'Espai Econòmic Europeu sense les garanties adequades.</p>
+
+      <h3>6. Drets ARSLOP</h3>
+      <p>En qualsevol moment podeu exercir els drets que s'indiquen a continuació, enviant un escrit a <strong>privacitat@foodlogistics.cat</strong> o per correu postal a la seu de FoodLogistics S.A., adjuntant còpia del vostre DNI o document identificatiu equivalent:</p>
+      <table>
+        <tr><th>Dret</th><th>Descripció</th></tr>
+        <tr><td><strong>Accés</strong></td><td>Obtenir confirmació sobre si tractem les vostres dades i accedir-hi.</td></tr>
+        <tr><td><strong>Rectificació</strong></td><td>Sol·licitar la correcció de les dades inexactes o incompletes.</td></tr>
+        <tr><td><strong>Supressió</strong></td><td>Sol·licitar l'eliminació de les vostres dades quan ja no siguin necessàries.</td></tr>
+        <tr><td><strong>Limitació</strong></td><td>Sol·licitar la suspensió del tractament en determinades circumstàncies.</td></tr>
+        <tr><td><strong>Oposició</strong></td><td>Oposar-vos al tractament de les vostres dades per motius relacionats amb la vostra situació particular.</td></tr>
+        <tr><td><strong>Portabilitat</strong></td><td>Rebre les vostres dades en un format estructurat, d'ús comú i llegible per màquina.</td></tr>
+      </table>
+      <p>Teniu dret a presentar una reclamació davant l'<strong>Agència Espanyola de Protecció de Dades (AEPD)</strong> a <a href="https://www.aepd.es" style="color:var(--color-primary);">www.aepd.es</a> si considereu que el tractament de les vostres dades vulnera la normativa vigent.</p>
+
+      <h3>7. Mesures de seguretat</h3>
+      <p>FoodLogistics S.A. ha implementat les mesures tècniques i organitzatives adequades per garantir la seguretat de les vostres dades personals i evitar la seva alteració, pèrdua, tractament o accés no autoritzat, tenint en compte l'estat de la tecnologia, la naturalesa de les dades i els riscos als quals estan exposades. Entre altres mesures: xifrat SSL/TLS, control d'accés basat en rols, còpies de seguretat periòdiques i formació del personal.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('privacitat')">Entès</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL: POLÍTICA DE COOKIES ═══════════════ -->
+<div class="modal-overlay" id="modalCookies">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2>Política de Cookies</h2>
+        <p>Darrera actualització: 1 de juny de 2025</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('cookies')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box">
+        Una cookie és un fitxer de text que s'emmagatzema al vostre dispositiu quan visiteu un lloc web. Les cookies permeten que el lloc web recordi les vostres preferències i millorin la vostra experiència de navegació.
+      </div>
+
+      <h3>1. Tipus de cookies que utilizem</h3>
+      <table>
+        <tr><th>Nom</th><th>Tipus</th><th>Finalitat</th><th>Durada</th><th>Titular</th></tr>
+        <tr><td><code>fl_session</code></td><td>Tècnica</td><td>Manté la sessió activa durant la navegació</td><td>Sessió</td><td>FoodLogistics S.A.</td></tr>
+        <tr><td><code>fl_cookie_consent</code></td><td>Tècnica</td><td>Registra les preferències de cookies de l'usuari</td><td>12 mesos</td><td>FoodLogistics S.A.</td></tr>
+        <tr><td><code>_sc_*</code></td><td>Analítica</td><td>Statcounter: mesura del trànsit web (visites, pàgines vistes, origen del trànsit)</td><td>2 anys</td><td>StatCounter (Irlanda)</td></tr>
+        <tr><td><code>_ga, _gid</code></td><td>Analítica</td><td>Google Analytics: anàlisi del comportament dels usuaris (si s'activa)</td><td>2 anys / 24h</td><td>Google LLC (EUA)*</td></tr>
+      </table>
+      <p style="font-size:0.8rem;color:var(--color-text-muted);">* Les transferències a Google LLC (EUA) es realitzen sota les garanties adequades del marc de protecció de dades EU-EUA (Data Privacy Framework).</p>
+
+      <h3>2. Classificació per necessitat</h3>
+      <ul>
+        <li><strong>Cookies tècniques o estrictament necessàries:</strong> Indispensables per al funcionament del Web. No requereixen consentiment.</li>
+        <li><strong>Cookies analítiques:</strong> Permeten el recompte de visites i analitzar-ne el comportament. Requereixen consentiment previ.</li>
+        <li><strong>Cookies de màrqueting:</strong> Actualmente no s'utilitzen en aquest Web.</li>
+      </ul>
+
+      <h3>3. Com gestionar les cookies</h3>
+      <p>Podeu gestionar les cookies a través de:</p>
+      <ul>
+        <li><strong>El nostre panel de preferències:</strong> fent clic al botó "Configurar cookies" del bàner que apareix en accedir al Web per primera vegada.</li>
+        <li><strong>El vostre navegador:</strong> la majoria de navegadors permeten bloquejar o eliminar cookies des de la configuració. Si desactiveu les cookies tècniques, algunes funcionalitats del Web podrien deixar de funcionar correctament.</li>
+      </ul>
+      <p>Enllaços de configuració per als principals navegadors:</p>
+      <ul>
+        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener" style="color:var(--color-primary);">Google Chrome</a></li>
+        <li><a href="https://support.mozilla.org/ca/kb/activa-i-desactiva-les-cookies" target="_blank" rel="noopener" style="color:var(--color-primary);">Mozilla Firefox</a></li>
+        <li><a href="https://support.apple.com/ca-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener" style="color:var(--color-primary);">Apple Safari</a></li>
+        <li><a href="https://support.microsoft.com/ca-es/microsoft-edge/eliminar-les-galetes-a-microsoft-edge" target="_blank" rel="noopener" style="color:var(--color-primary);">Microsoft Edge</a></li>
+      </ul>
+
+      <h3>4. Revocació del consentiment</h3>
+      <p>Podeu revocar el vostre consentiment en qualsevol moment eliminant les cookies del vostre navegador o ajustant les preferències des del bàner de cookies. La revocació no afecta la licitud del tractament basat en el consentiment previ a la seva retirada.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="openModal('cookiesConfig')">Configurar cookies</button>
+      <button class="btn btn-primary" onclick="closeModal('cookies')">Entès</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL: CONFIGURACIÓ COOKIES ═══════════════ -->
+<div class="modal-overlay" id="modalCookiesConfig">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2>Configuració de cookies</h2>
+        <p>Activeu o desactiveu les categories de cookies</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('cookiesConfig')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="cookie-config-item">
+        <div class="info">
+          <strong>Cookies tècniques <span class="badge-required">Necessàries</span></strong>
+          <span>Indispensables per al funcionament del lloc web. No es poden desactivar.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked disabled>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="cookie-config-item">
+        <div class="info">
+          <strong>Cookies analítiques</strong>
+          <span>Ens permeten comptar visites i analitzar com els usuaris interactuen amb el Web per millorar-lo (Statcounter, Google Analytics).</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleAnalytics">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="cookie-config-item">
+        <div class="info">
+          <strong>Cookies de màrqueting</strong>
+          <span>Actualmente no s'utilitzen en aquest Web.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleMarketing" disabled>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="acceptCookies('none')">Rebutjar opcionals</button>
+      <button class="btn btn-primary" onclick="saveCustomCookies()">Desar preferències</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+<header>
+  <nav class="container">
+    <a href="#inici" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2a3 3 0 0 0 6 0h6a3 3 0 0 0 6 0h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+        </svg>
+      </div>
+      FoodLogistics S.A.
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#inici">Inici</a></li>
+      <li><a href="#serveis">Serveis</a></li>
+      <li><a href="#sobre">Sobre nosaltres</a></li>
+      <li><a href="#contacte" class="btn btn-primary nav-cta">Contacte</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section id="inici">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1>Logística alimentària <span>eficient i segura</span> a nivell nacional</h1>
+        <p>FoodLogistics S.A. és la vostra empresa de confiança per a la distribució d'aliments refrigerats, secs i congelats. Des de Mataró, connectem productors i distribuïdors arreu del país.</p>
+        <div class="hero-actions">
+          <button class="btn-hero-primary" onclick="document.getElementById('contacte').scrollIntoView({behavior:'smooth'})">Sol·licita pressupost</button>
+          <button class="btn-hero-outline" onclick="document.getElementById('serveis').scrollIntoView({behavior:'smooth'})">Els nostres serveis</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><strong>+250</strong><span>Rutes actives</span></div>
+          <div class="stat"><strong>98%</strong><span>Lliuraments puntuals</span></div>
+          <div class="stat"><strong>20+</strong><span>Anys d'experiència</span></div>
+          <div class="stat"><strong>ISO 22000</strong><span>Certificació alimentària</span></div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80" alt="Camió de distribució alimentària FoodLogistics S.A." />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ SERVEIS ═══════════════════════════════ -->
+<section id="serveis">
+  <div class="container">
+    <p class="section-title">Els nostres serveis</p>
+    <p class="section-subtitle">Solucions integrals de logística i distribució alimentària adaptades a les necessitats del vostre negoci.</p>
+    <div class="services-grid">
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 19.93z"/></svg>
+        </div>
+        <h3>Transport refrigerat</h3>
+        <p>Flota especialitzada en transport a temperatura controlada per a productes frescos, làctics, carns i peixos.</p>
+        <span class="service-tag">+2°C / +8°C</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-9 14H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V7h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V7h4v2z"/></svg>
+        </div>
+        <h3>Emmagatzematge frigorífic</h3>
+        <p>Centres logístics amb cambres frigorífiques i congeladores d'última generació certificades per la normativa APPCC.</p>
+        <span class="service-tag">APPCC certificat</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 14-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+        </div>
+        <h3>Distribució última milla</h3>
+        <p>Lliuraments directes a supermercats, restaurants, hospitals i col·lectivitats amb finestres horàries precises.</p>
+        <span class="service-tag">Puntualitat garantida</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.2 9 11.4 5.25-1.2 9-6.15 9-11.4V5l-9-4zm-1 14l-3-3 1.41-1.41L11 12.17l5.59-5.58L18 8l-7 7z"/></svg>
+        </div>
+        <h3>Gestió de traçabilitat</h3>
+        <p>Sistema de traçabilitat digital en temps real que permet supervisar l'estat de cada enviament des de l'origen fins al destí.</p>
+        <span class="service-tag">Temps real</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        </div>
+        <h3>Logística per a e-commerce</h3>
+        <p>Solucions de fulfillment per a botigues en línia d'alimentació, amb preparació de comandes i enviament en 24 hores.</p>
+        <span class="service-tag">24h</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg>
+        </div>
+        <h3>Consultoria logística</h3>
+        <p>Assessorament expert per optimitzar la cadena de subministrament alimentari, reduir costos i millorar l'eficiència operativa.</p>
+        <span class="service-tag">A mida</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ SOBRE NOSALTRES ═══════════════════════════════ -->
+<section id="sobre">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80" alt="Equip de FoodLogistics S.A. al magatzem" />
+      </div>
+      <div class="about-text">
+        <p class="section-title">Sobre nosaltres</p>
+        <p class="lead">Més de 20 anys connectant el sector alimentari català i nacional.</p>
+        <p>FoodLogistics S.A. va néixer a Mataró com una petita empresa de transport local. Avui som un dels operadors logístics de referència en el sector alimentari, amb seu central al Maresme i delegacions a tot el territori.</p>
+        <p>Arran de l'obertura de noves rutes i la incorporació de personal altament qualificat, hem multiplicat la nostra capacitat operativa. Però mai hem perdut el compromís amb la qualitat, la seguretat alimentària i la satisfacció del client.</p>
+        <div class="values-list">
+          <div class="value-item">
+            <div class="value-dot"><svg viewBox="0 0 12 12"><path d="M5 8.5L2 5.5l1-1 2 2 4-4 1 1z"/></svg></div>
+            <p><strong>Seguretat alimentària:</strong> tots els processos auditats sota la norma ISO 22000 i APPCC.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-dot"><svg viewBox="0 0 12 12"><path d="M5 8.5L2 5.5l1-1 2 2 4-4 1 1z"/></svg></div>
+            <p><strong>Sostenibilitat:</strong> flota progressivament electrificada i reducció d'emissions al 2030.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-dot"><svg viewBox="0 0 12 12"><path d="M5 8.5L2 5.5l1-1 2 2 4-4 1 1z"/></svg></div>
+            <p><strong>Tecnologia:</strong> sistemes TMS avançats, traçabilitat digital i alertes en temps real.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-dot"><svg viewBox="0 0 12 12"><path d="M5 8.5L2 5.5l1-1 2 2 4-4 1 1z"/></svg></div>
+            <p><strong>Persones:</strong> equip de +150 professionals formats en manipulació i logística alimentària.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CONTACTE ═══════════════════════════════ -->
+<section id="contacte">
+  <div class="container">
+    <p class="section-title" style="text-align:center;">Contacta amb nosaltres</p>
+    <p class="section-subtitle" style="text-align:center;">Expliqueu-nos les vostres necessitats i us prepararem una proposta personalitzada sense compromís.</p>
+    <div class="contact-inner">
+      <div class="contact-info">
+        <p>Estem al vostre servei de dilluns a divendres, de 7:00 a 20:00 h. Per a urgències logístiques, disposem d'atenció 24/7.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div>
+            <strong>Seu central</strong>
+            <span>Polígon Industrial Can Magarola, Mataró, 08302 Barcelona</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
+          <div>
+            <strong>Telèfon</strong>
+            <span>+34 937 00 00 00</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div>
+            <strong>Correu electrònic</strong>
+            <span>info@foodlogistics.cat</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          </div>
+          <div>
+            <strong>Horari d'atenció</strong>
+            <span>Dl–Dv: 7:00–20:00 · Urgències: 24/7</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARI AMB CHECKBOXES LEGALS -->
+      <div class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" placeholder="El vostre nom" required />
+          </div>
+          <div class="form-group">
+            <label for="empresa">Empresa</label>
+            <input type="text" id="empresa" name="empresa" placeholder="Nom de l'empresa" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Correu electrònic *</label>
+            <input type="email" id="email" name="email" placeholder="correu@empresa.cat" required />
+          </div>
+          <div class="form-group">
+            <label for="telefon">Telèfon de contacte *</label>
+            <input type="tel" id="telefon" name="telefon" placeholder="+34 600 000 000" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="missatge">Missatge *</label>
+          <textarea id="missatge" name="missatge" placeholder="Descriviu les vostres necessitats logístiques..." required></textarea>
+        </div>
+
+        <!-- CHECKBOX 1: Consentiment dades (obligatori) -->
+        <div class="checkbox-group checkbox-required" id="checkPrivGroup">
+          <input type="checkbox" id="checkPriv" name="checkPriv" />
+          <label for="checkPriv">
+            * He llegit i accepto la <a href="#" onclick="openModal('privacitat'); return false;">Política de Privacitat</a> i consento el tractament de les meves dades personals per part de FoodLogistics S.A. amb la finalitat de respondre la meva consulta. <strong>(Obligatori)</strong>
+          </label>
+        </div>
+
+        <!-- CHECKBOX 2: Comunicacions comercials (opcional) -->
+        <div class="checkbox-group" id="checkCommGroup">
+          <input type="checkbox" id="checkComm" name="checkComm" />
+          <label for="checkComm">
+            Autoritzo FoodLogistics S.A. a enviar-me comunicacions comercials sobre els seus productes i serveis per correu electrònic o telèfon. Podeu revocar aquest consentiment en qualsevol moment. Consulteu l'<a href="#" onclick="openModal('avis'); return false;">Avís Legal</a> per a més informació. <em>(Opcional)</em>
+          </label>
+        </div>
+
+        <button class="btn btn-primary form-submit" id="submitBtn" type="button">Enviar missatge</button>
+        <div class="form-success" id="formSuccess">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Missatge enviat correctament!<br/>
+          <span style="font-weight:400;font-size:0.9rem;color:var(--color-text-muted)">Ens posarem en contacte amb vosaltres en les pròximes 24 hores.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2a3 3 0 0 0 6 0h6a3 3 0 0 0 6 0h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+            </svg>
+          </div>
+          FoodLogistics S.A.
+        </div>
+        <p>Distribució i logística alimentària de confiança des de Mataró. Cadena de fred garantida, traçabilitat total.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegació</h4>
+        <ul>
+          <li><a href="#inici">Inici</a></li>
+          <li><a href="#serveis">Serveis</a></li>
+          <li><a href="#sobre">Sobre nosaltres</a></li>
+          <li><a href="#contacte">Contacte</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Serveis</h4>
+        <ul>
+          <li><a href="#serveis">Transport refrigerat</a></li>
+          <li><a href="#serveis">Emmagatzematge</a></li>
+          <li><a href="#serveis">Última milla</a></li>
+          <li><a href="#serveis">E-commerce</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><span onclick="openModal('avis')">Avís legal</span></li>
+          <li><span onclick="openModal('privacitat')">Política de privacitat</span></li>
+          <li><span onclick="openModal('cookies')">Política de cookies</span></li>
+          <li><span onclick="openModal('cookiesConfig')">Configurar cookies</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 FoodLogistics S.A. – Tots els drets reservats · Mataró, Barcelona</p>
+      <p>Web creada amb Claude (Anthropic) · Imatges: Unsplash</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════ JAVASCRIPT ═══════════════════════════════ -->
+<script>
+  // ── Menú mòbil ──
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => { navLinks.classList.toggle('open'); });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => { navLinks.classList.remove('open'); });
+  });
+
+  // ── Cookie Banner ──
+  function cookieConsentSet() {
+    return document.cookie.split(';').some(c => c.trim().startsWith('fl_cookie_consent='));
+  }
+  function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+  function hideBanner() {
+    document.getElementById('cookieBanner').classList.add('hidden');
+  }
+  function acceptCookies(level) {
+    setCookie('fl_cookie_consent', level, 365);
+    hideBanner();
+    closeModal('cookies');
+    closeModal('cookiesConfig');
+  }
+  function saveCustomCookies() {
+    const analytics = document.getElementById('toggleAnalytics').checked;
+    const val = analytics ? 'analytics' : 'none';
+    acceptCookies(val);
+  }
+  // Mostra el banner si no hi ha consentiment guardat
+  if (!cookieConsentSet()) {
+    document.getElementById('cookieBanner').classList.remove('hidden');
+  } else {
+    hideBanner();
+  }
+
+  // ── Modals ──
+  const modalMap = {
+    'avis': 'modalAvis',
+    'privacitat': 'modalPrivacitat',
+    'cookies': 'modalCookies',
+    'cookiesConfig': 'modalCookiesConfig'
+  };
+  function openModal(key) {
+    // Tanca tots primer
+    Object.values(modalMap).forEach(id => {
+      document.getElementById(id).classList.remove('open');
+    });
+    const el = document.getElementById(modalMap[key]);
+    if (el) {
+      el.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  function closeModal(key) {
+    const el = document.getElementById(modalMap[key]);
+    if (el) {
+      el.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+  // Tanca modal en clicar fora
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  // Tanca modal amb Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(el => {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+
+  // ── Formulari de contacte ──
+  const submitBtn = document.getElementById('submitBtn');
+  const formSuccess = document.getElementById('formSuccess');
+  submitBtn.addEventListener('click', () => {
+    const nom = document.getElementById('nom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefon = document.getElementById('telefon').value.trim();
+    const missatge = document.getElementById('missatge').value.trim();
+    const checkPriv = document.getElementById('checkPriv').checked;
+
+    // Validació camps obligatoris
+    const inputs = [
+      document.getElementById('nom'),
+      document.getElementById('email'),
+      document.getElementById('telefon'),
+      document.getElementById('missatge')
+    ];
+    let valid = true;
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        input.style.borderColor = '#E24B4A';
+        input.addEventListener('input', () => { input.style.borderColor = ''; }, { once: true });
+        valid = false;
+      }
+    });
+    if (!valid) return;
+
+    // Validació email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      const emailInput = document.getElementById('email');
+      emailInput.style.borderColor = '#E24B4A';
+      emailInput.focus();
+      return;
+    }
+
+    // Validació checkbox privacitat (obligatori)
+    if (!checkPriv) {
+      const group = document.getElementById('checkPrivGroup');
+      group.style.borderColor = '#E24B4A';
+      group.style.background = '#fff5f5';
+      setTimeout(() => {
+        group.style.borderColor = '';
+        group.style.background = '';
+      }, 2500);
+      group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Envia
+    submitBtn.textContent = 'Enviant...';
+    submitBtn.disabled = true;
+    setTimeout(() => {
+      document.querySelectorAll('#contactForm .form-row, #contactForm .form-group, #contactForm .checkbox-group, #submitBtn').forEach(el => { el.style.display = 'none'; });
+      formSuccess.style.display = 'block';
+    }, 1200);
+  });
+
+  // ── Animació scroll ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.service-card, .value-item, .contact-detail').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  // ── Nav actiu en scroll ──
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      if (window.scrollY >= section.offsetTop - 90) current = section.getAttribute('id');
+    });
+    navAnchors.forEach(a => {
+      a.style.color = '';
+      if (a.getAttribute('href') === '#' + current) a.style.color = 'var(--color-primary)';
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
